@@ -9,6 +9,15 @@
 import { gantt } from 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
 
+import db from '../../firebaseInit';
+
+// This import loads the firebase namespace along with all its type information.
+// import firebase from 'firebase/app';
+
+// These imports load individual services into the firebase namespace.
+// import 'firebase/auth';
+// import 'firebase/database';
+
 export default {
   data () {
     return {
@@ -42,7 +51,18 @@ export default {
     }
   },
   created () {
-    //
+    var citiesRef = db.collection('gantt');
+    console.log('ccc', citiesRef);
+    var allCities = citiesRef.get()
+      .then(snapshot => {
+          snapshot.forEach(doc => {
+              console.log(doc.id, '=>', doc.data());
+          });
+      })
+      .catch(err => {
+          console.log('Error getting documents', err);
+      });
+      console.log(process.env)
   },
   mounted () {
     gantt.init('gantt_here')  // 간트 그리기
